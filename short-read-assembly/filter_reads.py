@@ -14,12 +14,13 @@ try:
         rec1 = iter.next()
         rec2 = iter.next()
 
-        rec1_bad_bases = [x for x in rec1.letter_annotations["phred_quality"] if x < THRESHOLD]
-        rec2_bad_bases = [x for x in rec2.letter_annotations["phred_quality"] if x < THRESHOLD]
+        rec_1_qualities = rec1.letter_annotations["phred_quality"]
+        rec_2_qualities = rec2.letter_annotations["phred_quality"]
+
+        rec1_bad_bases = sum(rec_1_qualities)/len(rec_1_qualities) < THRESHOLD
+        rec2_bad_bases = sum(rec_2_qualities)/len(rec_2_qualities) < THRESHOLD
 
         if not rec1_bad_bases and not rec2_bad_bases:
             SeqIO.write([rec1, rec2], sys.stdout, "fastq-illumina")
 except StopIteration, e:
     pass
-
-
